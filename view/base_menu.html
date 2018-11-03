@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>迎新分班系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="http://csjava.cn:10000/campus_view/libs//layui/css/layui.css">
+    <script src="http://csjava.cn:10000/campus_view/libs//layui/layui.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="layui-side-scroll">
+    <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+    <ul class="layui-nav layui-nav-tree" lay-filter="test">
+        <li class="layui-nav-item ">
+            <a class="" href="javascript:;">招生管理</a>
+            <dl class="layui-nav-child">
+                <dd><a href="javascript:;">学年信息</a></dd>
+                <dd><a href="javascript:;">场次信息</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item layui-nav-itemed">
+            <a href="javascript:;">报名管理</a>
+            <dl class="layui-nav-child">
+                <dd><a href="javascript:;">信息一览</a></dd>
+                <dd><a href="" class="layui-this">问卷类型配置</a></dd>
+                <dd><a href="./question_template.html">问卷模版配置</a></dd>
+                <!--<dd><a href="javascript:;">答卷查看</a></dd>-->
+                <!--<dd><a href="javascript:;">问卷答案配置</a></dd>-->
+            </dl>
+        </li>
+    </ul>
+</div>
+
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+</script>
+</body>
+</html>

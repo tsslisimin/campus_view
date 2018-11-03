@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../libs/jquery.js"></script>
+    <script src="../js/route.js"></script>
+</head>
+<body>
+<select onchange="spanShow()" id="set"></select>
+
+
+<span id="sp"></span>
+
+
+<script>
+    function spanShow() {
+        let val = $("#set").val();
+        $("#sp").text(val);
+    }
+
+    $.get(school_year, function (data, status) {
+        if (data.code == 0) {
+            let items = data.data;
+            for (let i = 0; i < items.length; i++) {
+                var form = items[i].yearName;
+                $("#set").append("<option value='" + form + "'" + ">" + form + "</option>");
+
+            }
+        }
+    })
+
+
+</script>
+</body>
+</html>

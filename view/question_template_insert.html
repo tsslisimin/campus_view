@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>迎新分班系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../libs/layui/css/layui.css">
+    <script src="http://csjava.cn:10000/campus_view/libs/layui/layui.js"></script>
+    <script src="http://csjava.cn:10000/campus_view/libs/vue.js"></script>
+    <script src="http://csjava.cn:10000/campus_view/libs/layui/lay/modules/jquery.js"></script>
+    <script src="../js/route.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../libs/axios.js"></script>
+    <script src="../libs/jquery.js"></script>
+    <script src="../js/question_template_insert.js"></script>
+    <!--<script src="../libs/vue.js"></script>-->
+
+
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <style type="text/css">
+
+        .inp:focus {
+            border-style: solid;
+            border-color: #0098ff;
+            box-shadow: 0 0 1px #0098ff;
+        }
+
+        .del {
+            background: #ff4300;
+            float: right;
+            border: none;
+            color: white;
+            padding: 5px;
+            text-align: center;
+            font-size: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="body" style="height: 100%">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px; background: #f2f2f2" id="app">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 0px;">
+            <legend>新增模版</legend>
+        </fieldset>
+
+        <span style="margin-right:15px;  color: #ff4300;font-size: 20px; text-align: center;float: right">
+            <input id="sign" type="checkbox" style="margin: 5px; " v-on:click="signChange(this)">需要签名</span>
+
+        <span>问卷名称：</span>
+        <input style="padding: 5px;" type="text" v-model="templateName" placeholder="请输入问卷名称"/>
+
+        <button class="layui-btn" onclick="submit()">保存</button>
+        <div class="layui-tab layui-tab-card">
+            <ul class="layui-tab-title">
+                <li class="layui-this" onclick="push(1)">单选题</li>
+                <li onclick="push(2)">多选题</li>
+                <li onclick="push(3)">填空题</li>
+            </ul>
+        </div>
+        <div class="layui-card" v-for="item in items">
+            <div class="layui-card-header">
+                <label>({{item.typeDes}})</label>
+
+                <input class="inp" type="text" name="radio" v-model="item.describes" placeholder="请输入标题..."
+                       style="padding: 5px; border-style:none;">
+
+
+                <i class="layui-icon layui-icon-delete"
+                   style="font-size: 30px; float: right;color: #ff4300;"
+
+                   :qid.prop="item.index"
+                   onclick="deleteQuestion(this)"></i>
+            </div>
+
+            <!--单选-->
+            <div v-if="item.questionType === 1">
+                <div id="single" class="layui-card-body " style="border: #ffffff 1px"
+                     v-for="option in item.options">
+
+                    <!--<input type="radio" name="radio">-->
+                    <input class="inp" type="text" name="radio" v-model="option.content"
+                           style="padding: 5px;border-style:none">
+                    <!--<button :qid.prop="item.index" :opid.prop="option.index" class="del"-->
+                    <!--onclick="deleteOption(this)">删除-->
+                    <!--</button>-->
+                    <i class="layui-icon layui-icon-delete"
+                       style="font-size: 30px; float: right;color: #ff4300;"
+                       :qid.prop="item.index" :opid.prop="option.index"
+                       onclick="deleteOption(this)"></i>
+                    <div style="float: right">
+                        <input :name="item.index" type="radio"
+                               :qid.prop="item.index"
+                               :input.prop="item"
+                               v-on:click="inputClick(this,item,option.index)"/>
+                        <label>该项需要输入</label>
+                    </div>
+                    <hr/>
+                </div>
+                <!--<div style="float: right; padding: 5px">-->
+                <!--<input type="checkbox" v-model="item.editorType">-->
+                <!--<label>是否必答</label>-->
+                <!--</div>-->
+                <button :data.prop="item.index" id="add" class="layui-btn layui-btn-normal" style="width: 100%"
+                        data-type="reload" onclick="pushOption(this)">新增选项
+                </button>
+
+            </div>
+
+            <!--多选-->
+            <div v-if="item.questionType === 2">
+                <div id="muilt" class="layui-card-body" style="border: #ffffff 1px"
+                     v-for="option in item.options">
+
+                    <!--<input type="checkbox" name="chekck">-->
+                    <input class="inp" type="text"
+                           name="radio"
+                           v-model="option.content"
+                           style="padding: 5px; width: 93.5%;border-style:none">
+                    <i class="layui-icon layui-icon-delete"
+                       style="font-size: 30px; float: right;color: #ff4300;"
+
+                       :qid.prop="item.index" :opid.prop="option.index"
+                       onclick="deleteOption(this)"></i>
+
+                    <hr/>
+                </div>
+                <!--<div style="float: right; padding: 5px">-->
+                <!--<input type="checkbox" v-model="item.editorType">-->
+                <!--<label>是否必答</label>-->
+                <!--</div>-->
+                <button :data.prop="item.index" class="layui-btn layui-btn-normal"
+                        style="width: 100%"
+                        data-type="reload" onclick="pushOption(this)">新增选项
+                </button>
+
+
+            </div>
+            <!--填空-->
+            <div v-if="item.questionType === 3">
+
+                <div id="edit" class="layui-card-body" style="border: #ffffff 1px"
+                     v-for="option in item.options">
+
+                </div>
+
+            </div>
+            <div style=" padding: 5px">
+                <input type="checkbox" v-model="item.editorType">
+                <label>是否必答</label>
+
+
+                <span style="margin-right:15px;   text-align: center">
+                <input :checked="item.health == 1" id="health" type="checkbox" style="margin: 5px; "
+                       v-on:click="healthChange(item)">健康问卷</span>
+                <label>检验规则</label>
+
+                <select>
+                    <option v-for="op in options" v-bind:value="op.id">{{op.describes}}</option>
+                </select>
+            </div>
+        </div>
+
+
+        <br/>
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>迎新分班系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../libs/layui/css/layui.css">
+    <script src="../libs/layui/layui.js"></script>
+    <script src="../libs/jquery.js"></script>
+    <script src="../libs/layui/lay/modules/jquery.js"></script>
+    <script src="../js/route.js"></script>
+    <script src="../libs/vue.js"/>
+    <script src="../js/question.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body style="padding: 15px;">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 0px;">
+    <legend>场次信息</legend>
+</fieldset>
+
+
+搜索条件 场次名称：
+<div class="layui-inline">
+    <input class="layui-input" name="id" id="name" autocomplete="off">
+</div>
+学年：
+<div class="layui-inline">
+    <input class="layui-input" id="year" autocomplete="off">
+</div>
+<!--开始时间：-->
+<!--<div class="layui-inline">-->
+<!--<input class="layui-input" id="start" type="date" autocomplete="off">-->
+<!--</div>-->
+<button class="layui-btn" data-type="reload" onclick="query()">搜索</button>
+
+
+<button class="layui-btn layui-btn-normal" style="margin: 5px" parent="0" id="add" onClick="add()"><i
+        class="layui-icon">&#xe654;</i>添加
+</button>
+<table class="layui-hide" id="test" lay-filter="testDemo"></table>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="start">查看|编辑</a>
+    {{#  if(d.status === 2){ }}
+    <a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="open">开启</a>
+    {{#  } else { }}
+    <a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="close">关闭</a>
+    {{#  } }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+</script>
+<!-- 时间格式化 -->
+<script type="text/html" id="isDateTpl">
+    {{ JY.Date.Default(d.formatYear)}}·
+</script>
+
+<script type="text/html" id="titleTpl">
+    {{#  if(d.status === 1){ }}
+    <span style="color: #F581B1;">{{ "招生中"}}</span>
+    {{#  } else {d.status === 2 }}
+    {{ "已结束"}}
+    {{#  } }}
+</script>
+
+<div style=" display: none" id="createSchoolVenue">
+    <form class="layui-form layui-form-pane" action="" id="addForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">学年</label>
+            <div class="layui-input-inline">
+                <select onchange="spanShow()" name="yearName" id="set">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">场次名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="venueName" lay-verify="title" placeholder="请输入场次名称(必填)" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开始时间</label>
+            <div class="layui-input-inline">
+                <input name="startDate" id="date" lay-verify="date" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off"
+                       class="layui-input" type="text">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">截止时间</label>
+            <div class="layui-input-inline">
+                <input name="endDate" id="date2" lay-verify="date" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off"
+                       class="layui-input" type="text">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">招生简章</label>
+            <div class="layui-input-block">
+            <textarea placeholder="请输入内容(最多可以输入200个字)" cols="40" rows="5" id="note" name="content" maxlength="200"
+                      onkeyup="this.value=this.value.substring(0, 200)" class="layui-textarea"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div style=" display: none" id="updateSchoolVenue">
+    <form class="layui-form layui-form-pane" action="" id="updateForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">学年</label>
+            <div class="layui-input-inline">
+                <input type="text" name="yearName" v-model="item.yearName" lay-verify="title" placeholder="请输入场次名称(必填)"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">场次名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="venueName" v-model="item.venueName" lay-verify="title"
+                       placeholder="请输入场次名称(必填)" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开始时间</label>
+            <div class="layui-input-inline">
+                <input name="startDate" id="startDate" v-model="item.startDate" lay-verify="date"
+                       placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off"
+                       class="layui-input" type="text">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">截止时间</label>
+            <div class="layui-input-inline">
+                <input name="endDate" id="endDate" v-model="item.endDate" lay-verify="date"
+                       placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off"
+                       class="layui-input" type="text">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">招生简章</label>
+            <div class="layui-input-block">
+            <textarea placeholder="请输入内容(最多可以输入200个字)" cols="40" rows="5" name="content" maxlength="200"
+                      onkeyup="this.value=this.value.substring(0, 200)" class="layui-textarea"
+                      v-model="item.content"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    function query() {
+        var url = school_year_venue.concat("?venueName=").concat($("#name").val()).concat("&yearName=").concat($("#year").val());
+        // alert(url)
+        layui.use(['form', 'layedit', 'laydate'], function () {
+            var table = layui.table;
+            table.render({
+                elem: '#test'
+                ,
+                url: url
+                ,
+                cols: [[
+                    // {field: 'syvId', title: 'ID', sort: true},
+                    {field: 'venueName', title: '场次名称'}
+                    , {field: 'yearName', title: '学年'}
+                    , {field: 'startEndDate', title: '报名起止时间'}
+                    , {field: 'status', title: '报名状态', toolbar: '#titleTpl'}
+                    , {field: 'url', title: 'URL'}
+                    , {field: '', align: 'center', title: '操作', toolbar: '#barDemo'}
+                ]]
+                ,
+                page: true
+            });
+
+            var table = layui.table;
+            //监听工具条
+            table.on('tool(testDemo)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'open') { //开启招生
+                    layui.$.ajax({
+                        url: school_year_venue + "/updateSchoolYearVenue?id=" + data.syvId + "&status=1",
+                        type: "POST",
+                        success: function (data) {
+                            console.log(data);
+                            var results = data.data;
+                            if (null != results) {
+                                layui.area("成功")
+                            }
+                            location.reload(true);
+                        }
+                    });
+                } else if (obj.event === 'close') { //关闭招生
+                    layui.$.ajax({
+                        url: school_year_venue + "/updateSchoolYearVenue?id=" + data.syvId + "&status=2",
+                        type: "POST",
+                        success: function (data) {
+                            console.log(data)
+                            var results = data.code;
+                            if (results != null) {
+                                location.reload(true);
+                            } else {
+                                layer.alert('操作失败');
+                            }
+
+                        }
+                    });
+                } else if (obj.event === 'start') { //查看|编辑
+                    var syvId = data.syvId;
+                    layui.$.ajax({
+                        url: school_year_venue + "/findSchoolYearVenue?id=" + data.syvId,
+                        type: "GET",
+                        success: function (data) {
+                            layer.open({
+                                type: 1 //此处以iframe举例
+                                , title: '编辑场次'
+                                , area: ['500px', '480px']
+                                , content: layui.$("#updateSchoolVenue")
+                                , btn: ['确定', '取消']
+                                , yes: function () {
+                                    var entity = layui.$("#updateForm").serialize();
+                                    layui.$.ajax({
+                                        url: school_year_venue + "/editSchoolYearVenue?syvId=" + syvId,
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: entity,
+                                        success: function (data) {
+                                            var results = data.code;
+                                            if (results == 0) {
+                                                layer.alert('修改成功');
+                                                location.reload(true);
+                                            } else if (results == 500) {
+                                                layer.alert(data.data.msg);
+                                            }
+                                        }
+                                    });
+                                }
+                                , btn2: function () {
+                                    layer.closeAll();
+                                }
+                            });
+                            vue.item = data.data
+                        }
+                    });
+                }else if(obj.event === 'delete'){
+                    layer.confirm('确认删除该场次吗', function (index) {
+                        layui.$.ajax({
+                            url: school_year_venue + "?id=" + data.syvId,
+                            type: "DELETE",
+                            success: function (data) {
+                                var results = data.code;
+                                if (results == 0) {
+                                    layer.msg('删除成功！');
+                                    location.reload(true);
+                                } else if (results == 500) {
+                                    layer.alert(data.data.msg);
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            });
+
+            var laydate = layui.laydate;
+            var endDate = laydate.render({
+                elem: '#endDate',//选择器结束时间
+                type: 'datetime',
+                format: 'yyyy-MM-dd HH:mm:ss',
+                min: "1970-1-1",//设置min默认最小值
+                done: function (value, date) {
+                    startDate.config.max = {
+                        year: date.year,
+                        month: date.month - 1,//关键
+                        date: date.date,
+                        hours: 0,
+                        minutes: 0,
+                        seconds: 0
+                    }
+                }
+            });
+            //日期范围
+            var startDate = laydate.render({
+                elem: '#startDate',
+                type: 'datetime',
+                format: 'yyyy-MM-dd HH:mm:ss',
+                max: "2099-12-31",//设置一个默认最大值
+                done: function (value, date) {
+                    endDate.config.min = {
+                        year: date.year,
+                        month: date.month - 1, //关键
+                        date: date.date,
+                        hours: 0,
+                        minutes: 0,
+                        seconds: 0
+                    };
+                }
+            });
+
+
+            var date2 = laydate.render({
+                elem: '#date2',//选择器结束时间
+                type: 'datetime',
+                format: 'yyyy-MM-dd HH:mm:ss',
+                min: "1970-1-1",//设置min默认最小值
+                done: function (value, date) {
+                    date1.config.max = {
+                        year: date.year,
+                        month: date.month - 1,//关键
+                        date: date.date,
+                        hours: 0,
+                        minutes: 0,
+                        seconds: 0
+                    }
+                }
+            });
+            //日期范围
+            var date1 = laydate.render({
+                elem: '#date',
+                type: 'datetime',
+                format: 'yyyy-MM-dd HH:mm:ss',
+                max: "2099-12-31",//设置一个默认最大值
+                done: function (value, date) {
+                    date2.config.min = {
+                        year: date.year,
+                        month: date.month - 1, //关键
+                        date: date.date,
+                        hours: 0,
+                        minutes: 0,
+                        seconds: 0
+                    };
+                }
+            });
+        });
+
+        var vue = new Vue({
+            el: "#updateSchoolVenue",
+            data: {
+                item: {
+                    yearName: '',
+                    venueName: '',
+                    startDate: '',
+                    endDate: '',
+                    content: ''
+                }
+            }
+        });
+    }
+
+    query();
+
+    function add() {
+        var form = layui.form;
+        layui.$.ajax({
+            url: school_year + "/findBySchoolStatus?status=1",
+            type: "GET",
+            success: function (data) {
+                var formatYear = data.data.formatYear;
+                var id = data.data.id;
+                layer.open({
+                    type: 1 //此处以iframe举例
+                    , id: 'as'
+                    , title: '场次添加'
+                    , shade: 0.3
+                    , maxmin: true
+                    , area: ['500px', '480px']
+                    , offset: 'auto'
+                    , content: layui.$("#createSchoolVenue")
+                    , btn: ['确定', '取消']
+                    , yes: function () {
+                        var formParam = layui.$("#addForm").serialize();
+                        var value = layui.$("#set").val();
+                        layui.$.ajax({
+                            url: school_year_venue,
+                            type: "POST",
+                            dataType: "json",
+                            data: formParam + value,
+                            success: function (data) {
+                                var results = data.code;
+                                if (results == 0) {
+                                    layer.alert('添加成功');
+                                    location.reload(true);
+                                } else if (results == 500) {
+                                    layer.alert("添加失败,新加的开始时间不能小于已经存在的结束时间");
+                                }
+                            }
+                        });
+                    }
+                    , btn2: function () {
+                        layer.closeAll();
+                    }
+                });
+                form.render();
+            }
+        });
+    }
+
+    window.onload = function () {
+        document.getElementById('note').onkeyup = function () {
+            document.getElementById('text-count').innerHTML = this.value.length;
+        }
+    }
+</script>
+
+
+<span id="sp"></span>
+
+
+<script>
+    function spanShow() {
+        let val = $("#set").val();
+        $("#sp").text(val);
+    }
+
+    $.get(school_year, function (data, status) {
+        if (data.code == 0) {
+            let items = data.data;
+            for (let i = 0; i < items.length; i++) {
+                var form = items[i].yearName;
+                $("#set").append("<option value='" + form + "'" + ">" + form + "</option>");
+
+            }
+        }
+    })
+
+</script>
+
+<script src="../src/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+    layui.use('table', find("", "", ""));
+
+
+</script>
+
+
+<!--'<form class="layui-form layui-form-pane"  action="" id="addForm">'-->
+<!--+ '<input type="hidden" name="syId" value="' + id + '"> '-->
+<!--+ ' <div class="layui-form-item">'-->
+<!--+ '   <label class="layui-form-label">学年</label>'-->
+<!--+ '   <div class="layui-input-inline">'-->
+<!--+ '   	<select>' +-->
+<!--'<option>2018</option>' +-->
+<!--'<option>2019</option>' +-->
+<!--'<option>2020</option>' +-->
+<!--'</select>	<input value="' + formatYear + '" disabled="disabled" autocomplete="off" class="layui-input" type="text">'-->
+<!--+ '   </div>'-->
+<!--+ ' </div>'-->
+<!--+ ' <div class="layui-form-item">'-->
+<!--+ '   <label class="layui-form-label">场次名称</label>'-->
+<!--+ '   <div class="layui-input-inline">'-->
+<!--+ '   	  <input type="text" name="venueName" lay-verify="title" placeholder="请输入场次名称(必填)" autocomplete="off" class="layui-input">'-->
+<!--+ '   </div>'-->
+<!--+ ' </div>'-->
+<!--+ ' <div class="layui-form-item">'-->
+<!--+ '   <label class="layui-form-label">开始时间</label>'-->
+<!--+ '   <div class="layui-input-inline">'-->
+<!--+ '   		<input name="startDate" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" type="text">'-->
+<!--+ '   </div>'-->
+<!--+ ' </div>'-->
+<!--+ ' <div class="layui-form-item">'-->
+<!--+ '   <label class="layui-form-label">截止时间</label>'-->
+<!--+ '   <div class="layui-input-inline">'-->
+<!--+ '   		<input name="endDate" id="date2" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" type="text">'-->
+<!--+ '   </div>'-->
+<!--+ ' </div>'-->
+<!--+ ' <div class="layui-form-item layui-form-text">'-->
+<!--+ '   <label class="layui-form-label">招生简章</label>'-->
+<!--+ '   <div class="layui-input-block">'-->
+<!--+ '   		<textarea placeholder="请输入内容(最多可以输入200个字)" cols="40" rows="5" id="note" name="content" maxlength="200"  onkeyup="this.value=this.value.substring(0, 200)" class="layui-textarea"></textarea>'-->
+<!--+ '   </div>'-->
+<!--+ ' </div>'-->
+<!--+ '</form>'-->
+
+</body>
+</html>

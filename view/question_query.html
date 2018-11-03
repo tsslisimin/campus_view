@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>-->
+    <meta charset="UTF-8">
+    <title>问卷</title>
+
+
+    <!-- 引入 Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/route.js"></script>
+    <script src="../libs/jquery.js"></script>
+    <script src="../libs/vue.js"></script>
+    <script src="../js/question_detail.js"></script>
+
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+
+        .title {
+            margin-left: 40%;
+            margin-top: 5px;
+            font-size: 20px;
+            color: #1E9FFF;
+
+        }
+
+        .input {
+            border: none;
+            padding: 3px;
+            width: 100%;
+            height: 100%;
+
+        }
+
+        .app {
+
+            width: 100%;
+            height: 100%;
+        }
+
+
+    </style>
+
+    <script>
+        $.get(student_apply.concat("/apply/").concat(getQueryString("saId")), function (data, ev) {
+            console.log(data)
+            if (data.code == 0 && data.data.image != null && data.data.image != '') {
+                document.getElementById("img").src = data.data.image;
+                $("#sign").show();
+
+            }
+        });
+
+
+    </script>
+
+</head>
+<body>
+<div id="app" class="app">
+    <label class="title">{{title}}</label>
+    <div id="items" v-for="item in items" style="padding: 4px">
+        <label>{{item.itemIndex+':'+item.itemTitle + '（'+ (item.questionType==1 ?
+            '单选题':item.questionType==2?'多选题':'填空题') +'）'
+            }}</label>
+        <div class="panel panel-default">
+            <div class="panel-body" v-for="option in item.options">
+                <!--<div v-if="item.questionType ==1 ">-->
+                <!--<input type="radio" id="radio" v-bind:value="option.optionId" v-model="option.select">-->
+                <label> {{option.content}}</label>
+                <!--</div>-->
+                <!--<div v-if="item.questionType ==2 ">-->
+                <!--&lt;!&ndash;<input type="checkbox">&ndash;&gt;-->
+                <!--<label>{{option.content}}</label>-->
+                <!--</div>-->
+                <!--<div v-if="item.questionType ==3 ">-->
+                <!--<label>{{option.content}}</label>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+    <div style="display: none;" id="sign" style="padding: 5px">
+        <label>家长签名</label><br/>
+        <img id="img" width="50%" height="450" style=" border-color:#FF9600 #3366ff #12ad2a #f0ed7a;
+    border-style:solid;
+    border-width:2px;  "/>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="http://csjava.cn:10000/campus_view/libs//layui/css/layui.css">
+    <script src="http://csjava.cn:10000/campus_view/libs/layui/layui.js"></script>
+    <script src="http://csjava.cn:10000/campus_view/libs/layui/lay/modules/jquery.js"></script>
+    <!--<script src="http://csjava.cn:10000/campus_view/libs/vue.js"></script>-->
+    <script src="../js/route.js"></script>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <script src="../libs/vue.js"/>
+    <script src="../js/question.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body style="padding: 15px">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 0px;">
+    <legend>基本信息</legend>
+</fieldset>
+<div id="StudentForm" style="display: none;">
+    <form class="layui-form layui-form-pane" action="" id="addForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">档案号</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" v-model="item.numberId" name="numberId" lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学生编号</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" v-model="item.studentNumber" name="studentNumber" lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">XXDM</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" v-model="item.xxdm" name="xxdm"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">毕业学校</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" v-model="item.school" name="school" lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学生姓名</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" v-model="item.username" name="username" lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" v-model="item.sex" name="sex" lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">出生日期</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" v-model="item.birthday" name="birthday" lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">曾用名</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" v-model="item.usernameOld" name="usernameOld" lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">英文名</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" v-model="item.englishName" name="englishName" lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">身份证号码</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" v-model="item.cardNo" name="cardNo"
+                       lay-verify="identity|required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">籍贯</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="studentNative" v-model="item.studentNative"
+                       lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">民族</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" v-model="item.nation" name="nation" id="date"
+                       autocomplete="off"
+                       lay-verify="required" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">家庭地址</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="familyAddress" v-model="item.familyAddress"
+                       lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">户口</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="registerAddress" v-model="item.registerAddress"
+                       lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">特长</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="speciality" v-model="item.speciality"
+                       lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系方式</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="phone" v-model="item.phone"
+                       lay-verify="phone|required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮编</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="postcode" v-model="item.postcode"
+                       lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父亲</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="fatherName" v-model="item.fatherName"
+                       lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">母亲</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="motherName" v-model="item.motherName"
+                       lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父亲单位</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="fatherWork" v-model="item.fatherWork"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">母亲单位</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="motherWork" v-model="item.motherWork"
+                       lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父亲电话</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="fatherPhone" v-model="item.fatherPhone"
+                       lay-verify="phone|required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">母亲电话</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="motherPhone" v-model="item.motherPhone"
+                       lay-verify="phone|required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">公办志愿</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="publicVolunteer" v-model="item.publicVolunteer"
+                       lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="remark" v-model="item.remark"
+                       lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">LQXXDM</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="lqxxdm" v-model="item.lqxxdm"
+                       lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">LQXXMC</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="lqxxmc" v-model="item.lqxxmc"
+                       lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">录取方式</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="admissions" v-model="item.admissions"
+                       lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">全国学籍号</label>
+            <div class="layui-input-block" style="width: 100%">
+                <input type="text" name="studentCode" v-model="item.studentCode"
+                       lay-verify="required"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
+<div>
+
+
+    <form id="tf" style="margin-bottom: 15px">
+        <label>导入Excel</label>
+        <input type="file"
+               accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+               name="excel" value="导入Excel" onchange="show()"/>
+        <input style="display: none" id="startImport" type="button" onclick="importStudents()" value="开始导入">
+        <input type="button" onclick="exportItems()" value="导出到excel">
+    </form>
+
+    搜索条件
+    身份证：
+    <div class="layui-inline">
+        <input class="layui-input" id="cardNo" autocomplete="off">
+    </div>
+    姓名：
+    <div class="layui-inline">
+        <input class="layui-input" id="username" autocomplete="off">
+    </div>
+
+    <!--开始时间：-->
+    <!--<div class="layui-inline">-->
+    <!--<input class="layui-input" id="start" type="date" autocomplete="off">-->
+    <!--</div>-->
+    <button class="layui-btn" data-type="reload" id="search" onclick="searchStu()">搜索</button>
+
+    <button class="layui-btn" style="margin: 5px" parent="0" id="add" onClick="add()">添加</button>
+
+    <!--<i-->
+    <!--class="layui-icon"></i>导入Excel-->
+    <!--</button>-->
+    <table class="layui-hide" id="test" lay-filter="testDemo"></table>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="find">学生详情</a>
+        <a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="question">修改</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    </script>
+    <script type="text/html" id="titleTpl">
+        {{#  if(d.status === 0){ }}
+        <span style="color: #F581B1;">{{ "未答问卷"}}</span>
+        {{#  } else {}}
+        {{#  } }}
+        {{#  if(d.status === 1){ }}
+        <span style="color: #F581B1;">{{ "待审核"}}</span>
+        {{#  } else {}}
+        {{#  } }}
+        {{#  if(d.status === 2){ }}
+        <span style="color: #F581B1;">{{ "审核通过"}}</span>
+        {{#  } else {}}
+        {{#  } }}
+        {{#  if(d.status === 3){ }}
+        <span style="color: #F581B1;">{{ "审核驳回"}}</span>
+        {{#  } else {}}
+        {{#  } }}
+    </script>
+    <script>
+
+        function searchStu() {
+            let $ = layui.$;
+            var url = student_apply + "/query";
+            url += "?cardNo=" + $("#cardNo").val();
+            url += "&username=" + $("#username").val();
+            var table = layui.table;
+            table.render({
+                elem: '#test'
+                , url: url
+                , cols: [[
+                    // {field: 'id', width: 90, title: 'ID', sort: true},
+                    {field: 'studentNumber', width: 110, title: '学生编号'}
+                    , {field: 'school', width: 90, title: '毕业学校'}
+                    , {field: 'username', width: 90, title: '姓名'}
+                    , {field: 'sex', width: 40, title: '性别'}
+                    , {field: 'birthday', width: 120, title: '出生日期'}
+                    , {field: 'cardNo', width: 180, title: '身份证号'}
+                    , {field: 'publicVolunteer', width: 120, title: '公办志愿'}
+                    , {field: 'studentCode', width: 120, title: '全国学籍号'}
+                    , {field: '', align: 'left', title: '操作', toolbar: '#barDemo'}
+                ]]
+                , page: true
+            });
+        }
+
+
+        layui.use(['table', 'jquery', 'layer'], function () {
+            var sdtuentDetails = layui.jquery, layer = layui.layer, table = layui.table;
+            var table = layui.table;
+            table.render({
+                elem: '#test'
+                , url: student_apply + "/query"
+                , cols: [[
+                    // {field: 'id', width: 90, title: 'ID', sort: true},
+                    {field: 'studentNumber', width: 110, title: '学生编号'}
+                    , {field: 'school', width: 90, title: '毕业学校'}
+                    , {field: 'username', width: 90, title: '姓名'}
+                    , {field: 'sex', width: 40, title: '性别'}
+                    , {field: 'birthday', width: 120, title: '出生日期'}
+                    , {field: 'cardNo', width: 180, title: '身份证号'}
+                    , {field: 'publicVolunteer', width: 120, title: '公办志愿'}
+                    , {field: 'studentCode', width: 120, title: '全国学籍号'}
+                    , {field: '', align: 'left', title: '操作', toolbar: '#barDemo'}
+                ]]
+                , page: true
+            });
+
+            $('#search').on('click', function () {
+                var id = $("#id").val();
+                var cardNo = $("#cardNo").val();
+                var username = $("#username").val();
+                var studentNumber = $("#studentNumber").val();
+                // 搜索功能使用
+                atable.reload({
+                    where: { //设定异步数据接口的额外参数，任意设
+                        nick_name: nick_name,
+                        pay_type: pay_type,
+                        place_order: place_order,
+                        achieve_time: achieve_time,
+                        order_num: order_num,
+                        order_status: order_status
+                    }
+                });
+            });
+
+            var width = parseInt(window.screen.width * 0.7);
+            var height = window.screen.height - 300;
+            var table = layui.table;
+            //监听工具条
+            table.on('tool(testDemo)', function (obj) {
+                var data = obj.data;
+                console.log(data)
+                if (obj.event === 'find') {//查看
+                    layui.$.ajax({
+                        url: student_apply + "/findStudentExcelDetails",
+                        type: "GET",
+                        dataType: "json",
+                        data: {id: data.id},
+                        success: function (data) {
+                            console.log(data)
+                            layer.open({
+                                type: 1,
+                                area: [width + "px", height + "px"]
+                                , content: sdtuentDetails('#StudentForm')
+                            });
+                            vue.item = data.data
+                        }
+                    });
+                } else if (obj.event === 'question') {//修改
+                    layer.confirm('确定要修改么？', function (index) {
+                        layui.$.ajax({
+                            url: student_apply + "/findStudentExcelDetails",
+                            type: "GET",
+                            dataType: "json",
+                            data: {id: data.id},
+                            success: function (data) {
+                                console.log(data)
+                                layer.open({
+                                    type: 1,
+                                    area: [width + "px", height + "px"]
+                                    , content: sdtuentDetails('#StudentForm')
+                                    , btn: ['确定', '取消']
+                                    , yes: function () {
+                                        var entity = layui.$("#addForm").serialize();
+                                        layui.$.ajax({
+                                            url: student_apply + "/updateStudentExcel",
+                                            type: "POST",
+                                            dataType: "json",
+                                            data: entity,
+                                            success: function (data) {
+                                                var results = data.data;
+                                                if (null != results) {
+                                                    layui.area("成功")
+                                                }
+                                                searchStu();
+                                            }
+                                        });
+                                    }
+                                    , btn2: function () {
+                                        layer.closeAll();
+                                    }
+                                });
+                                vue.item = data.data
+                            }
+                        });
+                        layer.close(index);
+                    });
+                } else if (obj.event === 'delete') {//删除
+                    layer.confirm('确认删除该学生吗', function (index) {
+                        layui.$.ajax({
+                            url: student_apply + "?id=" + data.id,
+                            type: "DELETE",
+                            success: function (data) {
+                                var results = data.code;
+                                if (results == 0) {
+                                    layer.alert('删除成功');
+                                    searchStu();
+                                } else if (results == 500) {
+                                    layer.alert(data.data.msg);
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            });
+
+        });
+        var vue = new Vue({
+            el: "#StudentForm",
+            data: {
+                item: {
+                    numberId: '',
+                    studentNumber: '',
+                    xxdm: '',
+                    school: '',
+                    username: '',
+                    sex: '',
+                    birthday: '',
+                    usernameOld: '',
+                    englishName: '',
+                    cardNo: '',
+                    studentNative: '',
+                    nation: '',
+                    politicsStudent: '',
+                    familyAddress: '',
+                    registerAddress: '',
+                    speciality: '',
+                    phone: '',
+                    postcode: '',
+                    fatherName: '',
+                    motherName: '',
+                    fatherWork: '',
+                    motherWork: '',
+                    fatherPhone: '',
+                    motherPhone: '',
+                    publicVolunteer: '',
+                    remark: '',
+                    lqxxdm: '',
+                    lqxxmc: '',
+                    admissions: '',
+                    studentCode: ''
+                }
+            }
+        });
+
+        function add() {
+            layui.use(['form', 'layedit', 'laydate'], function () {
+                var form = layui.form;
+                var layer = layui.layer;
+                var layedit = layui.layedit;
+                var laydate = layui.laydate;
+
+
+                var form = layui.form;
+                var width = parseInt(window.screen.width * 0.7);
+                var height = window.screen.height - 300;
+                // layer.open({
+                //     type: 1,
+                //     area: [width + "px", height + "px"]
+                //     , content: layui.$('#createStudentForm')
+                //     , btn: ['确定', '取消']
+                //     , yes: function () {
+                //         //监听提交
+                //
+                //
+                //         var entity = layui.$("#addForm").serialize();
+                //         layui.$.ajax({
+                //             url: student_apply + "/createStudent",
+                //             type: "POST",
+                //             dataType: "json",
+                //             data: entity,
+                //             success: function (data) {
+                //                 var results = data.data;
+                //                 if (null != results) {
+                //                     layui.area("成功")
+                //                 }
+                //                 location.reload(true);
+                //             }
+                //         });
+                //     }
+                //     , btn2: function () {
+                //         layer.closeAll();
+                //     }
+                // });
+                layer.open({
+                    type: 1,
+                    area: [width + "px", height + "px"]
+                    , content: layui.$('#createStudentForm')
+                });
+                form.on('submit(submit)', function (data) {
+                    let field = data.field;
+                    $.post(student_apply + "/createStudent", field, function (data) {
+                        var results = data.code;
+                        if (results == 0) {
+                            layer.alert('添加成功');
+                        } else if (results == 500) {
+                            layer.alert(data.data.msg);
+                        }
+                    })
+                });
+
+                //日期
+                laydate.render({
+                    elem: '#dateStudent'
+                });
+
+                form.render();
+            });
+        }
+    </script>
+
+    <script>
+        function exportItems() {
+
+            window.open(student_apply.concat('/export'));
+        }
+
+        function show() {
+            $('#startImport').show();
+        }
+
+        function importStudents() {
+            var form = new FormData(document.getElementById("tf"));
+            $.ajax({
+                url: student_apply.concat("/import"),
+                type: "post",
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    console.log("over..");
+                    alert(data.msg);
+                    if (data.code == 0) {
+                        searchStu();
+                    }
+                },
+                error: function (e) {
+                    alert("错误！！");
+                }
+            });
+        }
+
+        layui.use('upload', function () {
+            var $ = layui.jquery
+                , upload = layui.upload;
+            var form = new FormData(document.getElementById("test3"));
+            upload.render({ //允许上传的文件后缀
+                elem: '#test3'
+                , url: student_apply.concat("/import")
+                , type: 'post'
+                , data: form
+                , accept: 'file' //普通文件
+                , exts: 'xlsx' //只允许上传制定格式文件
+                , done: function (res) {
+                    console.log(res)
+                }
+            });
+        });
+
+    </script>
+
+    <div id="createStudentForm" style="display: none;">
+        <form class="layui-form layui-form-pane" action="" id="createForm">
+            <div class="layui-form-item">
+                <label class="layui-form-label">档案号</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" v-model="item.numberId" name="numberId" lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">学生编号</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" v-model="item.studentNumber" name="studentNumber" lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">XXDM</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" v-model="item.xxdm" name="xxdm"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">毕业学校</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" v-model="item.school" name="school" lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">学生姓名</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" v-model="item.username" name="username" lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" v-model="item.sex" name="sex" lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">出生日期</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" v-model="item.birthday" id="dateStudent" name="birthday" lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">曾用名</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" v-model="item.usernameOld" name="usernameOld" lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">英文名</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" v-model="item.englishName" name="englishName" lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">身份证号码</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" v-model="item.cardNo" name="cardNo"
+                           lay-verify="identity|required"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">籍贯</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="studentNative" v-model="item.studentNative"
+                           lay-verify="required"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">民族</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" v-model="item.nation" name="nation"
+                           autocomplete="off"
+                           lay-verify="required" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">家庭地址</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="familyAddress" v-model="item.familyAddress"
+                           lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">户口</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="registerAddress" v-model="item.registerAddress"
+                           lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">特长</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="speciality" v-model="item.speciality"
+                           lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系方式</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="phone" v-model="item.phone"
+                           lay-verify="phone|required"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮编</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="postcode" v-model="item.postcode"
+                           lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">父亲</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="fatherName" v-model="item.fatherName"
+                           lay-verify="required"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">母亲</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="motherName" v-model="item.motherName"
+                           lay-verify="required"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">父亲单位</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="fatherWork" v-model="item.fatherWork"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">母亲单位</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="motherWork" v-model="item.motherWork"
+                           lay-verify="required"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">父亲电话</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="fatherPhone" v-model="item.fatherPhone"
+                           lay-verify="phone|required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">母亲电话</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="motherPhone" v-model="item.motherPhone"
+                           lay-verify="phone|required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">公办志愿</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="publicVolunteer" v-model="item.publicVolunteer"
+                           lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="remark" v-model="item.remark"
+                           lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">LQXXDM</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="lqxxdm" v-model="item.lqxxdm"
+                           lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">LQXXMC</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="lqxxmc" v-model="item.lqxxmc"
+                           lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">录取方式</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="admissions" v-model="item.admissions"
+                           lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">全国学籍号</label>
+                <div class="layui-input-block" style="width: 100%">
+                    <input type="text" name="studentCode" v-model="item.studentCode"
+                           lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" align="center">
+                <button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

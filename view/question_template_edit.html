@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="http://csjava.cn:10000/campus_view/libs//layui/css/layui.css">
+    <script src="../js/question_edit.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/route.js"></script>
+    <script src="../libs/jquery.js"></script>
+    <script src="../libs/vue.js"></script>
+    <script src="http://csjava.cn:10000/campus_view/libs//layui/layui.js"></script>
+    <script type="text/javascript">
+    </script>
+</head>
+<body>
+<form class="layui-form" action="" lay-filter="form" style="margin-top: 20px">
+    <div class="layui-form-item">
+        <label class="layui-form-label">模版名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="des" id="des" placeholder="请输入模版名称"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型</label>
+        <div class="layui-input-inline">
+            <input id="type" type="select" name="type" required lay-verify="required" placeholder="请输入类型"
+                   autocomplete="off"
+                   class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">1为单选</div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">开始时间</label>
+        <div class="layui-input-inline">
+            <input type="text" id="startDate" name="startDate" placeholder="请选择开始时间" autocomplete="off"
+                   lay-verify="required"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">结束时间</label>
+        <div class="layui-input-inline">
+            <input type="text" id="endDate" name="endDate" placeholder="请选择结束时间" autocomplete="off"
+                   lay-verify="required"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div id="commit" class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="update">立即修改</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+
+</form>
+</body>
+</html>
